@@ -8,6 +8,7 @@ import { pulse } from '#/plugins/pulse.js'
 import { requestTracing } from '#/plugins/request-tracing.js'
 import { setupProxy } from '#/common/helpers/proxy/setup-proxy.js'
 import { metrics } from '@defra/cdp-metrics'
+import { scheduler } from '#/plugins/scheduler.js'
 
 export async function createServer() {
   setupProxy()
@@ -49,6 +50,7 @@ export async function createServer() {
     metrics,
     secureContext,
     pulse,
+    scheduler,
     router
   ])
 

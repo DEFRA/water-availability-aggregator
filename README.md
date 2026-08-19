@@ -1,6 +1,6 @@
 # water-availability-aggregator
 
-Core delivery platform Node.js Backend Template.
+Core Delivery Platform Node.js Aggregator Service.
 
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
@@ -65,6 +65,18 @@ To run the application in `development` mode run:
 npm run dev
 ```
 
+When running alongside backend locally, use the local profile to avoid port clashes:
+
+```bash
+cp .env.example .env
+npm run dev:local
+```
+
+`dev:local` runs aggregator on `3002` and debugger on `9230`.
+
+Use `BACKEND_BASE_URL` to point the aggregator at backend for heartbeat and
+status checks (default `http://localhost:3001`).
+
 ### Testing
 
 To test the application run:
@@ -113,11 +125,32 @@ git config --global core.autocrlf false
 
 ## API endpoints
 
-| Endpoint             | Description                    |
-| :------------------- | :----------------------------- |
-| `GET: /health`       | Health                         |
-| `GET: /example    `  | Example API (remove as needed) |
-| `GET: /example/<id>` | Example API (remove as needed) |
+| Endpoint                                | Description             |
+| :-------------------------------------- | :---------------------- |
+| `GET: /`                                | Service info            |
+| `GET: /health`                          | Health                  |
+| `GET: /integration/status`              | Integration status      |
+| `GET: /integration/data-sources`        | Data source summary     |
+| `GET: /integration/data-sources/sample` | Development diagnostics |
+
+### Data source stubs for development
+
+To pull sample data from the Defra OGC Features API:
+
+```bash
+curl "http://localhost:3002/integration/data-sources/sample?source=defra&limit=5"
+```
+
+To pull field parcel stub data for local dev/testing (RPA placeholder path):
+
+```bash
+curl "http://localhost:3002/integration/data-sources/sample?source=rpa&limit=5"
+```
+
+If Defra is unavailable, set `DATA_STUB_FALLBACK_ENABLED=true` to return fallback
+stub records and keep local development unblocked. This defaults to `true` only in
+the local environment and must not be used as a production ingestion fallback.
+RPA stub data is also restricted to the local environment.
 
 ## Development helpers
 
